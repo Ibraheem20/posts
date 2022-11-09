@@ -3,21 +3,28 @@ import "bootstrap";
 import "bootstrap/scss/bootstrap.scss";
 import "@popperjs/core";
 import Comments from "./Comments";
+import { GlobalContext } from "./Context";
 class PostsList extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            like:[false],
+            like:[],
             comment:false
         }
     }
 
     onLikeClicked(idx){
-        this.props.likes.forEach((element, index) => {
+    let _likes = JSON.parse(JSON.stringify(this.context.Like()));
+    
+        _likes.forEach((element ,index) => {
             if(idx===index){
-                this.props.likes[index]=!this.props.likes[index];
+                _likes[index]=!_likes[index];
             }
         });     
+        this.setState({
+            like:_likes
+        })
+        this.context.Like(_likes)
     }
 
     onCommentClicked(){
@@ -37,7 +44,7 @@ class PostsList extends React.Component{
                             <p>{item}</p>
                         </div>
                         <div>
-                            <button onClick={this.onLikeClicked.bind(this, idx)} className={`btn ${this.props.likes[idx]?"btn-primary":"btn-light"} m-3 p-2`}>Like</button>
+                            <button onClick={this.onLikeClicked.bind(this, idx)} className={`btn ${this.state.like[idx]?"btn-primary":"btn-light"} m-3 p-2`}>Like</button>
                             <button onClick={this.onCommentClicked.bind(this)} className="btn m-3 p-2">Comment</button>
                         </div>
                         <div>
@@ -52,11 +59,12 @@ class PostsList extends React.Component{
                         </li>
                         )
                     })
-                }
+               }
       </ul>
       </div>
 
         )
     }
 }
+PostsList.contextType=GlobalContext;
 export default PostsList;

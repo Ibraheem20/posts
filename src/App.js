@@ -17,6 +17,16 @@ class App extends React.Component {
       likes:[]
     }
   }
+
+  Like = (options) => {
+    if(options!==undefined){
+    this.setState({
+      likes:options
+    })
+  }
+    return this.state.likes;
+  }
+
   onTextChange(e){
     this.setState({post:e.target.value});
   }
@@ -28,13 +38,13 @@ class App extends React.Component {
     _postsList.push(this.state.post);
     _likes.push(false)
     await this.setState({post:"" ,postsList:_postsList, likes:_likes})
-    console.log(this.state.likes);
+    //console.log(this.state.likes);
     }
     
   }
   render(){
   return (
-    // <GlobalContext.Provider >
+     <GlobalContext.Provider value={{Like:this.Like}} >
     <>
     <div className="container border-2 d-flex justify-content-center m-3">
       <div className='row'>
@@ -46,7 +56,7 @@ class App extends React.Component {
               <textarea value={this.state.post} onChange={this.onTextChange.bind(this)}></textarea>
             </label>
             <div>
-              <input type="submit" className={'btn btn-success'} onClick={this.onButtonClicked.bind(this)}></input>
+              <input type="submit" className={'btn btn-success'} onClick={this.onButtonClicked.bind(this)} />
             </div>
             <hr></hr>
         </div>
@@ -57,9 +67,9 @@ class App extends React.Component {
     <PostsList items={this.state.postsList} likes={this.state.likes} />
     </div>
     </>
-    // </GlobalContext.Provider>
+     </GlobalContext.Provider>
   );
 }
 }
-App.contextType=GlobalContext;
+
 export default App;
